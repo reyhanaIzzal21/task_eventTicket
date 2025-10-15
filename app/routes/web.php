@@ -1,11 +1,10 @@
 <?php
 // routes/web.php
 
-// pastikan base includes dan autoload sudah diatur di index.php
-
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
+// Ping test
 if ($requestUri === '/ping' && $requestMethod === 'GET') {
     echo "pong";
     exit;
@@ -49,8 +48,8 @@ if ($requestUri === '/logout') {
     exit;
 }
 
-// Workshop user
-if (preg_match('#^/ $#', $requestUri) && $requestMethod === 'GET') {
+// WORKSHOPS (user)
+if ($requestUri === '/' && $requestMethod === 'GET') {
     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
     $controller = new WorkshopController();
     $controller->index();
@@ -64,7 +63,7 @@ if (preg_match('#^/workshops/show/(\d+)$#', $requestUri, $matches) && $requestMe
     exit;
 }
 
-// Booking store
+// BOOKING STORE
 if ($requestUri === '/booking/store' && $requestMethod === 'POST') {
     require_once __DIR__ . '/../../app/Controllers/BookingController.php';
     $controller = new BookingController();
@@ -72,13 +71,14 @@ if ($requestUri === '/booking/store' && $requestMethod === 'POST') {
     exit;
 }
 
-// Admin: workshops (list)
+// ADMIN WORKSHOPS
 if ($requestUri === '/admin/workshops' && $requestMethod === 'GET') {
     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
     $controller = new WorkshopController();
-    $controller->adminIndex(); // method publik yang aman
+    $controller->adminIndex();
     exit;
 }
+
 // Admin: create workshop form
 if ($requestUri === '/admin/workshops/create' && $requestMethod === 'GET') {
     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
@@ -86,6 +86,7 @@ if ($requestUri === '/admin/workshops/create' && $requestMethod === 'GET') {
     $controller->adminCreate();
     exit;
 }
+
 // Admin: store new workshop
 if ($requestUri === '/admin/workshops/store' && $requestMethod === 'POST') {
     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
@@ -93,38 +94,32 @@ if ($requestUri === '/admin/workshops/store' && $requestMethod === 'POST') {
     $controller->adminStore();
     exit;
 }
-// // Admin: edit workshop form
-// if ($requestUri === '/admin/workshops/edit/(\d+)' && $requestMethod === 'GET') {
-//     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
-//     $controller = new WorkshopController();
-//     $controller->adminEdit($matches[1]);
-//     exit;
-// }
-// // Admin: update workshop
-// if ($requestUri === '/admin/workshops/update/(\d+)' && $requestMethod === 'POST') {
-//     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
-//     $controller = new WorkshopController();
-//     $controller->adminUpdate($matches[1]);
-//     exit;
-// }
+
+// ✅ Admin: edit workshop form
+if (preg_match('#^/admin/workshops/edit/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
+    $controller = new WorkshopController();
+    $controller->adminEdit($matches[1]);
+    exit;
+}
+
+// ✅ Admin: update existing workshop
+if (preg_match('#^/admin/workshops/update/(\d+)$#', $requestUri, $matches) && $requestMethod === 'POST') {
+    require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
+    $controller = new WorkshopController();
+    $controller->adminUpdate($matches[1]);
+    exit;
+}
+
 // Admin: delete workshop
-if ($requestUri === '/admin/workshops/delete/(\d+)' && $requestMethod === 'POST') {
+if (preg_match('#^/admin/workshops/delete/(\d+)$#', $requestUri, $matches) && $requestMethod === 'POST') {
     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
     $controller = new WorkshopController();
     $controller->adminDelete($matches[1]);
     exit;
 }
-// Admin: show workshop
-// if ($requestUri === '/admin/workshops/show/(\d+)' && $requestMethod === 'GET') {
-//     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
-//     $controller = new WorkshopController();
-//     $controller->adminShow($matches[1]);
-//     exit;
-// }
 
-
-
-// Admin bookings
+// ADMIN BOOKINGS
 if ($requestUri === '/admin/bookings' && $requestMethod === 'GET') {
     require_once __DIR__ . '/../../app/Controllers/AdminController.php';
     $controller = new AdminController();
@@ -132,11 +127,10 @@ if ($requestUri === '/admin/bookings' && $requestMethod === 'GET') {
     exit;
 }
 
-// Admin approve booking (POST)
+// Admin approve booking
 if (preg_match('#^/admin/bookings/approve/(\d+)$#', $requestUri, $matches) && $requestMethod === 'POST') {
     require_once __DIR__ . '/../../app/Controllers/AdminController.php';
     $controller = new AdminController();
     $controller->approveBooking($matches[1]);
     exit;
 }
-

@@ -20,6 +20,7 @@
                     <th>Start Date</th>
                     <th>Background Map</th>
                     <th>Is Open</th>
+                    <th>Address</th> <!-- Tambahkan baris ini -->
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -53,6 +54,7 @@
                         </td>
 
                         <td><?= $workshop['is_open'] ? 'Yes' : 'No' ?></td>
+                        <td><?= htmlspecialchars($workshop['address'] ?? '-') ?></td> <!-- Tambahkan baris ini -->
 
                         <td>
                             <a href="/admin/workshops/show/<?= $workshop['id'] ?>">Show</a> |
