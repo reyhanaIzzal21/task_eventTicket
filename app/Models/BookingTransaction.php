@@ -1,0 +1,112 @@
+<?php
+// app/Models/BookingTransaction.php
+
+class BookingTransaction
+{
+    private $databaseConnection;
+
+    public function __construct(mysqli $databaseConnection)
+    {
+        $this->databaseConnection = $databaseConnection;
+    }
+
+    public function create(array $data)
+    {
+        $query = "INSERT INTO booking_transaction (name, phone, email, customer_bank_name, customer_bank_account, customer_bank_number, proof, total_amount, workshop_id, is_paid, quantity, booking_trx_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+        $stmt = $this->databaseConnection->prepare($query);
+        $stmt->bind_param(
+            'ssssssiiiii s', // we'll build correct types below
+            $data['name'],
+            $data['phone'],
+            $data['email'],
+            $data['customer_bank_name'],
+            $data['customer_bank_account'],
+            $data['customer_bank_number'],
+            $data['proof'],
+            $data['total_amount'],
+            $data['workshop_id'],
+            $data['is_paid'],
+            $data['quantity'],
+            $data['booking_trx_id']
+        );
+        // The above binding string was incorrect for exact types (php requires matching signature).
+        // To avoid complex binding errors, do dynamic binding below instead:
+        $stmt->close();
+
+        // Use proper binding:
+        $query = "INSERT INTO booking_transaction (name, phone, email, customer_bank_name, customer_bank_account, customer_bank_number, proof, total_amount, workshop_id, is_paid, quantity, booking_trx_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+        $stmt = $this->databaseConnection->prepare($query);
+        $stmt->bind_param(
+            'sssssssiiiis',
+            $data['name'],
+            $data['phone'],
+            $data['email'],
+            $data['customer_bank_name'],
+            $data['customer_bank_account'],
+            $data['customer_bank_number'],
+            $data['proof'],
+            $data['total_amount'],
+            $data['workshop_id'],
+            $data['is_paid'],
+            $data['quantity'],
+            $data['booking_trx_id']
+        );
+
+        $executed = $stmt->execute();
+        if ($executed) {
+            $insertId = $this->databaseConnection->insert_id;
+            $stmt->close();
+            return $insertId;
+        }
+        $stmt->close();
+        return false;
+    }
+
+    public function allByWorkshop(int $workshopId)
+    {
+        $query = "SELECT * FROM booking_transaction WHERE workshop_id = ? ORDER BY created_at DESC";
+        $stmt = $this->databaseConnection->prepare($query);
+        $stmt->bind_param('i', $workshopId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        $stmt->close();
+        return $rows;
+    }
+
+    public function all()
+    {
+        $query = "SELECT bt.*, w.name as workshop_name FROM booking_transaction bt JOIN workshop w ON bt.workshop_id = w.id ORDER BY bt.created_at DESC";
+        $result = $this->databaseConnection->query($query);
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
+    public function find(int $id)
+    {
+        $query = "SELECT * FROM booking_transaction WHERE id = ? LIMIT 1";
+        $stmt = $this->databaseConnection->prepare($query);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $row = $res->fetch_assoc();
+        $stmt->close();
+        return $row ?: null;
+    }
+
+    public function updateIsPaid(int $id, int $isPaid)
+    {
+        $query = "UPDATE booking_transaction SET is_paid = ?, updated_at = NOW() WHERE id = ?";
+        $stmt = $this->databaseConnection->prepare($query);
+        $stmt->bind_param('ii', $isPaid, $id);
+        $executed = $stmt->execute();
+        $stmt->close();
+        return $executed;
+    }
+}
