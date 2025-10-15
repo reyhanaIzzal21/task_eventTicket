@@ -116,20 +116,6 @@
                 <input id="password_confirm" name="password_confirm" type="password" required>
             </div>
 
-            <div class="field">
-                <label for="role">Register as</label>
-                <select id="role" name="role">
-                    <option value="user">User</option>
-                    <option value="admin">Admin (requires admin code)</option>
-                </select>
-            </div>
-
-            <div class="field">
-                <label for="admin_secret">Admin Secret (only if registering as admin)</label>
-                <input id="admin_secret" name="admin_secret" type="text" placeholder="Masukkan kode admin jika ada">
-                <div class="note">Jika ingin membuat akun admin, set ADMIN_SECRET di config/includes/config.php, atau minta kode admin.</div>
-            </div>
-
             <div class="actions">
                 <button type="submit">Register</button>
                 <a href="/login" style="text-decoration:none; margin-left:8px;">Login</a>

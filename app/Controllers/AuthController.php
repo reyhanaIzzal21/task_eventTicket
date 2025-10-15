@@ -33,8 +33,6 @@ class AuthController
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
         $passwordConfirm = $_POST['password_confirm'] ?? '';
-        $roleRequested = $_POST['role'] ?? 'user'; // default user
-        $adminSecretProvided = $_POST['admin_secret'] ?? '';
 
         $errors = [];
 
@@ -49,24 +47,6 @@ class AuthController
         }
         if ($password !== $passwordConfirm) {
             $errors[] = "Password confirmation does not match.";
-        }
-
-        // role handling: only allow 'admin' if correct secret provided
-        $finalRole = 'user';
-        if ($roleRequested === 'admin') {
-            // check ADMIN_SECRET constant
-            if (defined('ADMIN_SECRET')) {
-                $adminSecret = ADMIN_SECRET;
-            } else {
-                // default secret if belum diset (ganti di config/includes/config.php)
-                $adminSecret = 'ADMIN2025';
-            }
-
-            if ($adminSecretProvided === $adminSecret) {
-                $finalRole = 'admin';
-            } else {
-                $errors[] = "Admin secret tidak valid. Jika kamu ingin membuat admin, set ADMIN_SECRET di config/includes/config.php atau masukkan kode yang benar.";
-            }
         }
 
         // stop if errors
@@ -93,8 +73,7 @@ class AuthController
             'name' => $name,
             'occupation' => $occupation,
             'email' => $email,
-            'password' => $hashedPassword,
-            'role' => $finalRole
+            'password' => $hashedPassword
         ];
 
         $createdId = $this->userModel->create($userData);
