@@ -26,20 +26,24 @@ class User
 
     public function create(array $userData)
     {
-        $query = "INSERT INTO users (name, occupation, email, password, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())";
+        $query = "INSERT INTO users (name, occupation, email, password, created_at, updated_at)
+              VALUES (?, ?, ?, ?, NOW(), NOW())";
         $statement = $this->databaseConnection->prepare($query);
+
         if (!$statement) {
             return false;
         }
+
         $statement->bind_param(
-            'sssss',
+            'ssss',
             $userData['name'],
             $userData['occupation'],
             $userData['email'],
-            $userData['password'], // already hashed
-            $userData['role']
+            $userData['password'] // already hashed
         );
+
         $executed = $statement->execute();
+
         if ($executed) {
             $insertedId = $this->databaseConnection->insert_id;
             $statement->close();
