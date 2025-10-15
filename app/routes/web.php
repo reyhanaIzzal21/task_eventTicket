@@ -72,6 +72,24 @@ if ($requestUri === '/booking/store' && $requestMethod === 'POST') {
     exit;
 }
 
+// Booking cerate
+if ($requestUri === '/booking/create' && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/BookingController.php';
+    $controller = new BookingController();
+    $controller->store();
+    exit;
+}
+
+// Booking create by workshop slug
+if (preg_match('#^/booking/create/([^/]+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/BookingController.php';
+    $controller = new BookingController();
+    $controller->create($matches[1]);
+    exit;
+}
+
+
+
 // Admin: workshops (list)
 if ($requestUri === '/admin/workshops' && $requestMethod === 'GET') {
     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
@@ -140,3 +158,20 @@ if (preg_match('#^/admin/bookings/approve/(\d+)$#', $requestUri, $matches) && $r
     exit;
 }
 
+// ================== WORKSHOP (USER) ==================
+
+// Tampilkan semua workshop (list)
+if ($requestUri === '/workshops' && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
+    $controller = new WorkshopController();
+    $controller->index();
+    exit;
+}
+
+// Tampilkan detail workshop berdasarkan ID
+if (preg_match('#^/workshops/([a-zA-Z0-9\-]+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
+    $controller = new WorkshopController();
+    $controller->show($matches[1]);
+    exit;
+}

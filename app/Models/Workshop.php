@@ -96,4 +96,16 @@ class Workshop
         $stmt->close();
         return $executed;
     }
+
+    public function findBySlug(string $slug)
+    {
+        $query = "SELECT * FROM workshop WHERE slug = ? LIMIT 1";
+        $stmt = $this->databaseConnection->prepare($query);
+        $stmt->bind_param('s', $slug);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $row = $res->fetch_assoc();
+        $stmt->close();
+        return $row ?: null;
+    }
 }

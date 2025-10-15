@@ -27,16 +27,18 @@ class WorkshopController
     }
 
     // User: show single workshop with booking form
-    public function show($id)
+    public function show(string $slug)
     {
-        $workshop = $this->workshopModel->find((int)$id);
+        $workshop = $this->workshopModel->findBySlug($slug);
         if (!$workshop) {
-            http_response_code(404);
-            echo "Workshop not found.";
+            echo "Workshop tidak ditemukan.";
             return;
         }
+
         require __DIR__ . '/../Views/workshops/show.php';
     }
+
+
 
     public function adminIndex()
     {

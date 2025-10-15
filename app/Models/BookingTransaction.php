@@ -12,52 +12,41 @@ class BookingTransaction
 
     public function create(array $data)
     {
-        $query = "INSERT INTO booking_transaction (name, phone, email, customer_bank_name, customer_bank_account, customer_bank_number, proof, total_amount, workshop_id, is_paid, quantity, booking_trx_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
-        $stmt = $this->databaseConnection->prepare($query);
-        $stmt->bind_param(
-            'ssssssiiiii s', // we'll build correct types below
-            $data['name'],
-            $data['phone'],
-            $data['email'],
-            $data['customer_bank_name'],
-            $data['customer_bank_account'],
-            $data['customer_bank_number'],
-            $data['proof'],
-            $data['total_amount'],
-            $data['workshop_id'],
-            $data['is_paid'],
-            $data['quantity'],
-            $data['booking_trx_id']
-        );
-        // The above binding string was incorrect for exact types (php requires matching signature).
-        // To avoid complex binding errors, do dynamic binding below instead:
-        $stmt->close();
+        $query = "INSERT INTO booking_transaction 
+            (name, phone, email, customer_bank_name, customer_bank_account, customer_bank_number, proof, total_amount, workshop_id, is_paid, quantity, booking_trx_id, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
-        // Use proper binding:
-        $query = "INSERT INTO booking_transaction (name, phone, email, customer_bank_name, customer_bank_account, customer_bank_number, proof, total_amount, workshop_id, is_paid, quantity, booking_trx_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
         $stmt = $this->databaseConnection->prepare($query);
+
+        if (!$stmt) {
+            die("Query prepare gagal: " . $this->databaseConnection->error);
+        }
+
+        // Perhatikan urutan dan tipe datanya:
         $stmt->bind_param(
             'sssssssiiiis',
-            $data['name'],
-            $data['phone'],
-            $data['email'],
-            $data['customer_bank_name'],
-            $data['customer_bank_account'],
-            $data['customer_bank_number'],
-            $data['proof'],
-            $data['total_amount'],
-            $data['workshop_id'],
-            $data['is_paid'],
-            $data['quantity'],
-            $data['booking_trx_id']
+            $data['name'],                  // s
+            $data['phone'],                 // s
+            $data['email'],                 // s
+            $data['customer_bank_name'],    // s
+            $data['customer_bank_account'], // s
+            $data['customer_bank_number'],  // s
+            $data['proof'],                 // s
+            $data['total_amount'],          // i
+            $data['workshop_id'],           // i
+            $data['is_paid'],               // i
+            $data['quantity'],              // i
+            $data['booking_trx_id']         // s
         );
 
         $executed = $stmt->execute();
+
         if ($executed) {
             $insertId = $this->databaseConnection->insert_id;
             $stmt->close();
             return $insertId;
         }
+
         $stmt->close();
         return false;
     }
@@ -79,7 +68,11 @@ class BookingTransaction
 
     public function all()
     {
-        $query = "SELECT bt.*, w.name as workshop_name FROM booking_transaction bt JOIN workshop w ON bt.workshop_id = w.id ORDER BY bt.created_at DESC";
+        $query = "SELECT bt.*, w.name as workshop_name 
+                  FROM booking_transaction bt 
+                  JOIN workshop w ON bt.workshop_id = w.id 
+                  ORDER BY bt.created_at DESC";
+
         $result = $this->databaseConnection->query($query);
         $rows = [];
         while ($row = $result->fetch_assoc()) {
