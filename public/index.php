@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-ini_set('display_errors','1');
+ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
 define('BASE_PATH', dirname(__DIR__)); // project root
@@ -13,15 +13,22 @@ define('BASE_PATH', dirname(__DIR__)); // project root
 spl_autoload_register(function ($className) {
     $classPath = str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
     $appPath = BASE_PATH . '/app/' . $classPath;
-    if (file_exists($appPath)) { require_once $appPath; return; }
+    if (file_exists($appPath)) {
+        require_once $appPath;
+        return;
+    }
     $possible = BASE_PATH . '/' . $classPath;
-    if (file_exists($possible)) { require_once $possible; return; }
+    if (file_exists($possible)) {
+        require_once $possible;
+        return;
+    }
 });
 
 // load config
 $configFile = BASE_PATH . '/config/includes/config.php';
 if (!file_exists($configFile)) {
-    http_response_code(500); echo "Config missing";
+    http_response_code(500);
+    echo "Config missing";
     exit;
 }
 require_once $configFile;
@@ -38,11 +45,13 @@ $path = '/';
 if ($scriptName !== '' && strpos($requestUri, $scriptName) === 0) {
     $path = substr($requestUri, strlen($scriptName));
 }
-if ($path === '') $path = '/';
+if ($path === '')
+    $path = '/';
 
 // pastikan trailing slash konsisten
 $path = rtrim($path, '/');
-if ($path === '') $path = '/';
+if ($path === '')
+    $path = '/';
 
 // buat variable global agar routes/web.php bisa pakai
 $requestUri = $path;
