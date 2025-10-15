@@ -136,10 +136,44 @@ class BookingController
         $createdId = $this->bookingModel->create($data);
 
         if ($createdId) {
-            header('Location: /user/dashboard?message=booking_success&trx=' . urlencode($bookingTrxId));
+            header('Location: /booking/show/' . urlencode($bookingTrxId));
             exit;
         } else {
             echo "Gagal membuat booking. Coba lagi.";
         }
+    }
+    public function show(string $bookingTrxId)
+    {
+        if (empty($_SESSION['user_id'])) {
+            header('Location: /login');
+            exit;
+        }
+
+        // Cari data booking berdasarkan booking_trx_id
+        $query = "SELECT bt.*, w.name AS workshop_name, w.slug AS workshop_slug, w.price AS workshop_price 
+              FROM booking_transaction bt
+              JOIN workshop w ON bt.workshop_id = w.id
+              WHERE bt.booking_trx_id = ? LIMIT 1";
+
+        $stmt = $this->databaseConnection->prepare($query);
+        $stmt->bind_param('s', $bookingTrxId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $booking = $result->fetch_assoc();
+        $stmt->close();
+
+        if (!$booking) {
+            http_response_code(404);
+            echo "Transaksi booking tidak ditemukan.";
+            return;
+        }
+
+        $viewPath = __DIR__ . '/../Views/booking/booking_show.php';
+        if (!file_exists($viewPath)) {
+            echo "File view tidak ditemukan: " . htmlspecialchars($viewPath);
+            return;
+        }
+
+        require $viewPath;
     }
 }

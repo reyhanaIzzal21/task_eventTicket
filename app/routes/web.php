@@ -79,6 +79,15 @@ if ($requestUri === '/booking/create' && $requestMethod === 'GET') {
     exit;
 }
 
+// Booking show (by booking_trx_id)
+if (preg_match('#^/booking/show/([A-Za-z0-9\-_]+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/BookingController.php';
+    $controller = new BookingController();
+    $controller->show($matches[1]);
+    exit;
+}
+
+
 // Booking create by workshop slug
 if (preg_match('#^/booking/create/([^/]+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
     require_once __DIR__ . '/../../app/Controllers/BookingController.php';
