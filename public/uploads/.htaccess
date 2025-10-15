@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Jika project dijalankan di subfolder, set RewriteBase ke /subfolder/
+    # contoh: RewriteBase /myproject/
+    RewriteBase /
+
+    # Jika request mengarah ke file/folder sebenarnya, jangan rewrite
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Kirim request lain ke index.php
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    ErrorDocument 404 /index.php
+</IfModule>
