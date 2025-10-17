@@ -1,7 +1,10 @@
-<?php require __DIR__ . '/../layouts/header.php'; ?>
+<?php
+require_once __DIR__ . '/../layouts/header.php';
+require_once __DIR__ . '/../layouts/sidebar.php';
+?>
 
 
-<div class="container">
+<div class="admin-main-content">
 <h1><?= htmlspecialchars($workshop['name']) ?></h1>
 <?php if (!empty($workshop['thumbnail'])): ?>
 <img src="<?= htmlspecialchars($workshop['thumbnail']) ?>" style="max-width:320px; display:block; margin-bottom:12px;">
@@ -21,4 +24,3 @@
 </div>
 
 
-<?php require __DIR__ . '/../layouts/footer.php'; ?>

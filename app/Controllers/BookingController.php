@@ -142,6 +142,7 @@ class BookingController
             echo "Gagal membuat booking. Coba lagi.";
         }
     }
+
     public function show(string $bookingTrxId)
     {
         if (empty($_SESSION['user_id'])) {

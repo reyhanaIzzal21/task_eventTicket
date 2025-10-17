@@ -1,14 +1,6 @@
 <?php
-// routes/web.php
-
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestMethod = $_SERVER['REQUEST_METHOD'];
-
-// Ping test
-if ($requestUri === '/ping' && $requestMethod === 'GET') {
-    echo "pong";
-    exit;
-}
 
 // REGISTER
 if ($requestUri === '/register' && $requestMethod === 'GET') {
@@ -50,8 +42,8 @@ if ($requestUri === '/logout') {
 
 // WORKSHOPS (user)
 if ($requestUri === '/' && $requestMethod === 'GET') {
-    require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
-    $controller = new WorkshopController();
+    require_once __DIR__ . '/../../app/Controllers/LandingController.php';
+    $controller = new LandingController();
     $controller->index();
     exit;
 }
@@ -122,7 +114,7 @@ if ($requestUri === '/admin/workshops/store' && $requestMethod === 'POST') {
     exit;
 }
 
-// ✅ Admin: edit workshop form
+// Admin: edit workshop form
 if (preg_match('#^/admin/workshops/edit/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
     $controller = new WorkshopController();
@@ -130,7 +122,7 @@ if (preg_match('#^/admin/workshops/edit/(\d+)$#', $requestUri, $matches) && $req
     exit;
 }
 
-// ✅ Admin: update existing workshop
+// Admin: update existing workshop
 if (preg_match('#^/admin/workshops/update/(\d+)$#', $requestUri, $matches) && $requestMethod === 'POST') {
     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
     $controller = new WorkshopController();
@@ -150,7 +142,7 @@ if (preg_match('#^/admin/workshops/delete/(\d+)$#', $requestUri, $matches) && $r
 if ($requestUri === '/admin/bookings' && $requestMethod === 'GET') {
     require_once __DIR__ . '/../../app/Controllers/AdminController.php';
     $controller = new AdminController();
-    $controller->bookings();
+    $controller->index();
     exit;
 }
 
@@ -159,6 +151,14 @@ if (preg_match('#^/admin/bookings/approve/(\d+)$#', $requestUri, $matches) && $r
     require_once __DIR__ . '/../../app/Controllers/AdminController.php';
     $controller = new AdminController();
     $controller->approveBooking($matches[1]);
+    exit;
+}
+
+// Admin show booking
+if (preg_match('#^/admin/booking/show/([A-Za-z0-9\-_]+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/AdminController.php';
+    $controller = new AdminController();
+    $controller->show($matches[1]);
     exit;
 }
 

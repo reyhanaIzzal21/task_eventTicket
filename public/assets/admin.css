@@ -1,0 +1,50 @@
+:root {
+    --brand-blue: #0d6efd;
+    --brand-blue-600: #0b5ed7;
+    --card-radius: 12px;
+}
+
+/* card & table styling */
+.card.section-card {
+    border-radius: var(--card-radius);
+    box-shadow: 0 6px 18px rgba(13, 110, 253, 0.06);
+    border: 1px solid rgba(13, 110, 253, 0.06);
+}
+
+.table .img-thumb {
+    width: 64px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* small helper spacing */
+.actions-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* form card */
+.form-card .form-label {
+    font-weight: 600;
+    color: #0b5ed7;
+}
+
+/* file preview */
+.image-preview {
+    max-width: 140px;
+    max-height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* responsive adjustments */
+@media (max-width: 575.98px) {
+    .table-responsive {
+        font-size: .92rem;
+    }
+}
