@@ -21,6 +21,17 @@ class Workshop
         return $rows;
     }
 
+    public function getAllOpenWorkshops()
+    {
+        $query = "SELECT * FROM workshop WHERE is_open = 1 ORDER BY started_at DESC";
+        $result = $this->databaseConnection->query($query);
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
     public function find(int $id)
     {
         $query = "SELECT * FROM workshop WHERE id = ? LIMIT 1";

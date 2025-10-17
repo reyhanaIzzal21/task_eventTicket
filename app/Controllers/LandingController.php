@@ -24,7 +24,7 @@ class LandingController
 
     public function index()
     {
-        // $workshopModel = new Workshop($this->databaseConnection);
+        $workshops = $this->workshopModel->getAllOpenWorkshops();
         require __DIR__ . '/../Views/landing-page/index.php';
     }
 }
