@@ -32,6 +32,14 @@
         <div class="md:flex">
             <!-- Kolom Kiri: Detail Workshop (Gambar & Deskripsi) -->
             <div class="md:w-3/5 p-4 md:p-6 lg:p-8">
+                
+                <!-- Tombol Kembali yang baru ditambahkan -->
+                <a href="/workshops" 
+                   class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-6 transition duration-150 p-2 -ml-2 rounded-lg hover:bg-blue-50">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-1"></i>
+                    Kembali ke Daftar Workshop
+                </a>
+
                 <!-- Gambar Utama / Thumbnail Workshop -->
                 <img class="w-full h-80 object-cover rounded-lg shadow-md mb-6" 
                      src="<?= htmlspecialchars($workshop['thumbnail']) ?>" 
@@ -91,8 +99,8 @@
                             <p class="text-gray-700 mb-3"><?= htmlspecialchars($workshop['address']) ?? 'Alamat tidak tersedia.' ?></p>
                             
                             <!-- Tombol Google Maps (jika 'bg_map' ada) -->
-                            <?php if (!empty($workshop['bg_map'])): ?>
-                                <a href="<?= htmlspecialchars($workshop['bg_map']) ?>" 
+                            <?php if (!empty($workshop['gmaps'])): ?>
+                                <a href="<?= htmlspecialchars($workshop['gmaps']) ?>" 
                                    target="_blank" 
                                    class="inline-flex items-center text-blue-600 hover:text-blue-800 transition duration-150 font-medium">
                                     <i data-lucide="external-link" class="w-4 h-4 mr-1"></i>
