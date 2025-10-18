@@ -138,7 +138,7 @@ class AuthController
             header('Location: /admin/workshops');
             exit;
         } else {
-            header('Location: /user/dashboard');
+            header('Location: /workshops');
             exit;
         }
     }

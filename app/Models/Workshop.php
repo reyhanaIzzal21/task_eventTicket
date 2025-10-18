@@ -21,6 +21,40 @@ class Workshop
         return $rows;
     }
 
+    public function search($q = '', $filter = 'all', $limit = null)
+    {
+        $q = trim($q);
+        $where = '1=1';
+
+        // escape input untuk mencegah SQL injection
+        if ($q !== '') {
+            $escaped = $this->databaseConnection->real_escape_string($q);
+            $where .= " AND (name LIKE '%$escaped%' OR address LIKE '%$escaped%' OR about LIKE '%$escaped%')";
+        }
+
+        // filter by date
+        if ($filter === 'upcoming') {
+            $where .= " AND started_at >= NOW()";
+        } elseif ($filter === 'past') {
+            $where .= " AND started_at < NOW()";
+        }
+
+        $query = "SELECT * FROM workshop WHERE $where ORDER BY started_at DESC";
+
+        if (!is_null($limit)) {
+            $query .= " LIMIT " . (int) $limit;
+        }
+
+        $result = $this->databaseConnection->query($query);
+        $rows = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $rows[] = $row;
+            }
+        }
+        return $rows;
+    }
+
     public function getAllOpenWorkshops()
     {
         $query = "SELECT * FROM workshop WHERE is_open = 1 ORDER BY started_at DESC";

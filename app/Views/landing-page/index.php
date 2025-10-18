@@ -84,7 +84,7 @@
             </div>
 
             <div class="text-center mt-5">
-                <a href="#" class="btn btn-outline-primary btn-lg rounded-pill px-5">View All Events</a>
+                <a href="/workshops" class="btn btn-outline-primary btn-lg rounded-pill px-5">View All Events</a>
             </div>
         </div>
     </section>

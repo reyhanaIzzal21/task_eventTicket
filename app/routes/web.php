@@ -164,9 +164,9 @@ if (preg_match('#^/admin/booking/show/([A-Za-z0-9\-_]+)$#', $requestUri, $matche
 
 // Tampilkan semua workshop (list)
 if ($requestUri === '/workshops' && $requestMethod === 'GET') {
-    require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
-    $controller = new WorkshopController();
-    $controller->index();
+    require_once __DIR__ . '/../../app/Controllers/LandingController.php';
+    $controller = new LandingController();
+    $controller->getWorkshops();
     exit;
 }
 
