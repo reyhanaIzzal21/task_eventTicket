@@ -92,15 +92,6 @@ $i = 1;
                                                 <a class="btn btn-sm btn-outline-primary" href="/admin/booking/show/<?= htmlspecialchars($booking['booking_trx_id']) ?>">
                                                     <i class="bi bi-eye"></i> View
                                                 </a>
-
-                                                <!-- contoh button mark-as-paid (pastikan route tersedia di backend) -->
-                                                <?php if (empty($booking['is_paid'])): ?>
-                                                    <form method="post" action="/admin/bookings/mark-paid/<?= $booking['id'] ?>" class="m-0">
-                                                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Mark booking as paid?');">
-                                                            <i class="bi bi-cash-stack"></i>
-                                                        </button>
-                                                    </form>
-                                                <?php endif; ?>
                                             </div>
                                         </td>
                                     </tr>

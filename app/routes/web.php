@@ -55,6 +55,14 @@ if (preg_match('#^/workshops/show/(\d+)$#', $requestUri, $matches) && $requestMe
     exit;
 }
 
+// BOOKING LIST
+if ($requestUri === '/bookings' && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/BookingController.php';
+    $controller = new BookingController();
+    $controller->index();
+    exit;
+}
+
 // BOOKING STORE
 if ($requestUri === '/booking/store' && $requestMethod === 'POST') {
     require_once __DIR__ . '/../../app/Controllers/BookingController.php';
@@ -67,7 +75,7 @@ if ($requestUri === '/booking/store' && $requestMethod === 'POST') {
 if ($requestUri === '/booking/create' && $requestMethod === 'GET') {
     require_once __DIR__ . '/../../app/Controllers/BookingController.php';
     $controller = new BookingController();
-    $controller->store();
+    $controller->create(    $userId);
     exit;
 }
 

@@ -13,8 +13,8 @@ class BookingTransaction
     public function create(array $data)
     {
         $query = "INSERT INTO booking_transaction 
-            (name, phone, email, customer_bank_name, customer_bank_account, customer_bank_number, proof, total_amount, workshop_id, is_paid, quantity, booking_trx_id, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+        (name, phone, email, customer_bank_name, customer_bank_account, customer_bank_number, proof, total_amount, workshop_id, is_paid, quantity, booking_trx_id, user_id, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
         $stmt = $this->databaseConnection->prepare($query);
 
@@ -22,9 +22,8 @@ class BookingTransaction
             die("Query prepare gagal: " . $this->databaseConnection->error);
         }
 
-        // Perhatikan urutan dan tipe datanya:
         $stmt->bind_param(
-            'sssssssiiiis',
+            'sssssssiiiisi',
             $data['name'],                  // s
             $data['phone'],                 // s
             $data['email'],                 // s
@@ -36,7 +35,8 @@ class BookingTransaction
             $data['workshop_id'],           // i
             $data['is_paid'],               // i
             $data['quantity'],              // i
-            $data['booking_trx_id']         // s
+            $data['booking_trx_id'],        // s
+            $data['user_id']                // i
         );
 
         $executed = $stmt->execute();
@@ -101,5 +101,45 @@ class BookingTransaction
         $executed = $stmt->execute();
         $stmt->close();
         return $executed;
+    }
+
+    public function allByUserId(int $userId)
+    {
+        $query = "SELECT 
+                bt.*, 
+                w.name AS workshop_name, 
+                w.slug AS workshop_slug, 
+                w.price AS workshop_price,
+                w.thumbnail AS workshop_thumbnail,
+                w.started_at AS workshop_started_at,
+                w.time_at AS workshop_time_at,
+                bt.created_at AS booking_created_at
+              FROM booking_transaction bt
+              JOIN workshop w ON bt.workshop_id = w.id
+              WHERE bt.user_id = ? 
+              ORDER BY bt.created_at DESC";
+
+        $stmt = $this->databaseConnection->prepare($query);
+
+        if (!$stmt) {
+            die("Query prepare gagal: " . $this->databaseConnection->error);
+        }
+
+        $stmt->bind_param('i', $userId);
+
+        if (!$stmt->execute()) {
+            // optional: debug
+            error_log("BookingTransaction allByUserId execute error: " . $stmt->error);
+            $stmt->close();
+            return [];
+        }
+
+        $result = $stmt->get_result();
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        $stmt->close();
+        return $rows;
     }
 }

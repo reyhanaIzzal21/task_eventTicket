@@ -5,23 +5,12 @@ $sidebarWidth = 250;
 ob_start();
 ?>
 <div class="d-flex flex-column h-100">
-    <a href="/admin/dashboard" class="d-flex align-items-center mb-3 text-decoration-none">
-        <!-- <img src="/assets/images/logo.png" alt="Logo" width="38" height="38" class="me-2"> -->
-        <h2 class="fs-3 fw-bold">ThreeTix</h2>
+    <a href="/admin/dashboard" class="text-center d-flex align-items-center justify-content-center text-decoration-none mb-0">
+        <h2 class="fs-3 fw-bold text-center">ThreeTix</h2>
     </a>
-
     <hr>
 
     <ul class="nav nav-pills flex-column mb-auto">
-        <!-- <li class="nav-item mb-1">
-            <a href="/admin/dashboard" class="nav-link d-flex align-items-center <?php echo ($currentPage ?? '') === 'dashboard' ? 'active' : 'text-dark'; ?>">
-                <svg class="bi me-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M0 0h4v4H0zM6 0h4v7H6zM12 0h4v10h-4zM0 6h4v10H0z" />
-                </svg>
-                Dashboard
-            </a>
-        </li> -->
-
         <li class="nav-item mb-1">
             <a href="/admin/workshops" class="nav-link d-flex align-items-center <?php echo ($currentPage ?? '') === 'workshops' ? 'active' : 'text-dark'; ?>">
                 <svg class="bi me-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -41,7 +30,7 @@ ob_start();
         </li>
 
         <li class="nav-item mb-1">
-            <a href="/admin/users" class="nav-link d-flex align-items-center <?php echo ($currentPage ?? '') === 'users' ? 'active' : 'text-dark'; ?>">
+            <a href="#" class="nav-link d-flex align-items-center <?php echo ($currentPage ?? '') === 'users' ? 'active' : 'text-dark'; ?>">
                 <svg class="bi me-2" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M10 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM2 13s1-1 6-1 6 1 6 1v1H2v-1z" />
                 </svg>

@@ -28,7 +28,7 @@
                     <h1 class="display-4">More Than Just a Ticket, It's the Start of Your Adventure.</h1>
                     <p class="lead my-4">Discover workshops, seminars, and exclusive events designed to inspire and elevate your skills. ThreeTix is your gateway to new experiences.</p>
                     <div class="d-flex flex-column flex-sm-row gap-3">
-                        <a href="#events" class="btn btn-primary btn-lg px-5 py-3">Explore Events</a>
+                        <a href="/workshops" class="btn btn-primary btn-lg px-5 py-3">Explore Events</a>
                     </div>
                 </div>
                 <div class="col-lg-6 d-none d-lg-block">

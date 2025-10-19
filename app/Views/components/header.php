@@ -6,9 +6,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/workshops">Workshops</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">View My Bookings</a></li>
+                <li class="nav-item"><a class="nav-link" href="/bookings">View My Bookings</a></li>
             </ul>
             <?php if (!empty($_SESSION['user_id'])): ?>
                 <div class="dropdown">

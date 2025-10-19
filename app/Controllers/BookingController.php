@@ -21,6 +21,18 @@ class BookingController
         $this->workshopModel = new Workshop($this->databaseConnection);
     }
 
+    public function index()
+    {
+        if (empty($_SESSION['user_id'])) {
+            header('Location: /login');
+            exit;
+        }
+        $userId = $_SESSION['user_id'];
+        $bookings = $this->bookingModel->allByUserId((int)$userId);
+        // render view
+        require __DIR__ . '/../views/booking/index.php';
+    }
+
     /**
      * Menampilkan form booking berdasarkan slug
      */
@@ -129,7 +141,8 @@ class BookingController
             'workshop_id' => $workshopId,
             'is_paid' => 0, // default belum dibayar
             'quantity' => $quantity,
-            'booking_trx_id' => $bookingTrxId
+            'booking_trx_id' => $bookingTrxId,
+            'user_id' => $userId
         ];
 
         // Simpan ke database via model

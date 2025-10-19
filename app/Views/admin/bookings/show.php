@@ -27,7 +27,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                         <h6 class="mb-3">Booking Information</h6>
 
                         <dl class="row">
-                            <dt class="col-sm-4 text-muted">Transaction ID</dt>
+                            <dt class="col-sm-4 text-muted">Ticket Code</dt>
                             <dd class="col-sm-8"><?= htmlspecialchars($booking['booking_trx_id'] ?? '-') ?></dd>
 
                             <dt class="col-sm-4 text-muted">Booked At</dt>
@@ -36,7 +36,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                             <dt class="col-sm-4 text-muted">Total</dt>
                             <dd class="col-sm-8">Rp <?= number_format($booking['total_amount'] ?? 0, 0, ',', '.') ?></dd>
 
-                            <dt class="col-sm-4 text-muted">Status</dt>
+                            <dt class="col-sm-4 text-muted">Status Transaction</dt>
                             <dd class="col-sm-8">
                                 <?php if (!empty($booking['is_paid'])): ?>
                                     <span class="badge bg-success">Paid</span>
@@ -45,11 +45,14 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                                 <?php endif; ?>
                             </dd>
 
-                            <dt class="col-sm-4 text-muted">Payment Method</dt>
-                            <dd class="col-sm-8"><?= htmlspecialchars($booking['payment_method'] ?? '-') ?></dd>
+                            <dt class="col-sm-4 text-muted">Bank Name</dt>
+                            <dd class="col-sm-8"><?= htmlspecialchars($booking['customer_bank_name'] ?? '-') ?></dd>
 
-                            <dt class="col-sm-4 text-muted">Notes</dt>
-                            <dd class="col-sm-8"><?= nl2br(htmlspecialchars($booking['notes'] ?? '-')) ?></dd>
+                            <dt class="col-sm-4 text-muted">Bank Account</dt>
+                            <dd class="col-sm-8"><?= htmlspecialchars($booking['customer_bank_account'] ?? '-') ?></dd>
+
+                            <dt class="col-sm-4 text-muted">Bank Number</dt>
+                            <dd class="col-sm-8"><?= htmlspecialchars($booking['customer_bank_number'] ?? '-') ?></dd>
                         </dl>
 
                         <!-- Approve form -->
@@ -92,7 +95,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                             <dt class="col-sm-4 text-muted">Phone</dt>
                             <dd class="col-sm-8"><?= htmlspecialchars($booking['phone'] ?? '-') ?></dd>
 
-                            <dt class="col-sm-4 text-muted">Quantity</dt>
+                            <dt class="col-sm-4 text-muted">Quantity Ticket</dt>
                             <dd class="col-sm-8"><?= htmlspecialchars($booking['quantity'] ?? 1) ?></dd>
                         </dl>
                     </div>
@@ -112,10 +115,10 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                             <div>
                                 <div class="fw-semibold"><?= htmlspecialchars($booking['workshop_name'] ?? '-') ?></div>
                                 <div class="text-muted small">
-                                    <?= htmlspecialchars($booking['started_at'] ?? '-') ?> <?= htmlspecialchars($booking['time_at'] ?? '') ?>
+                                    <?= htmlspecialchars($booking['workshop_started_at'] ?? '-') ?> <?= htmlspecialchars($booking['workshop_time_at'] ?? '') ?>
                                 </div>
                                 <div class="mt-2 small text-muted" style="max-width:380px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                    <?= htmlspecialchars($booking['address'] ?? '-') ?>
+                                    <?= htmlspecialchars($booking['workshop_address'] ?? '-') ?>
                                 </div>
                             </div>
                         </div>

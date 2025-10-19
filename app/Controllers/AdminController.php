@@ -34,7 +34,7 @@ class AdminController
         }
 
         // Cari data booking berdasarkan booking_trx_id
-        $query = "SELECT bt.*, w.name AS workshop_name, w.slug AS workshop_slug, w.price AS workshop_price 
+        $query = "SELECT bt.*, w.name AS workshop_name, w.started_at AS workshop_started_at, w.price AS workshop_price, w.thumbnail AS workshop_thumbnail, w.address AS workshop_address
               FROM booking_transaction bt
               JOIN workshop w ON bt.workshop_id = w.id
               WHERE bt.booking_trx_id = ? LIMIT 1";

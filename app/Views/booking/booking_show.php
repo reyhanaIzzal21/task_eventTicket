@@ -1,160 +1,217 @@
+<?php
+// booking/show.php (Bootstrap 5 version)
+?>
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Detail Booking</title>
-    <!-- Memuat Tailwind CSS untuk styling modern dan responsif -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Memuat Lucide Icons -->
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Optional: Bootstrap Icons (jika ingin ganti ikon nanti) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Lucide (dipertahankan seperti semula) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <link rel="stylesheet" href="/assets/landing.css">
+
     <style>
+        :root {
+            --brand-blue: #0b5ed7;
+            --card-radius: 14px;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7fafc; /* Latar belakang sangat cerah */
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background-color: #f7fafc;
         }
-        .icon-sm {
-            width: 1rem;
-            height: 1rem;
-            margin-right: 0.5rem;
+
+        .panel-card {
+            border-radius: var(--card-radius);
+            background: #fff;
+            border: 1px solid rgba(11, 94, 215, 0.06);
+            box-shadow: 0 10px 30px rgba(11, 94, 215, 0.06);
         }
+
+        .header-banner {
+            background: var(--brand-blue);
+            color: #fff;
+            padding: 1.5rem;
+            border-top-left-radius: var(--card-radius);
+            border-top-right-radius: var(--card-radius);
+        }
+
+        .summary-panel {
+            background: #f1f7ff;
+            border-left: 4px solid var(--brand-blue);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .muted-small {
+            color: #6c757d;
+            font-size: .95rem;
+        }
+
         .info-item {
+            padding: .7rem 0;
+            border-bottom: 1px solid #e9eef8;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e5e7eb;
         }
+
         .info-item:last-child {
             border-bottom: none;
+        }
+
+        .proof-img {
+            max-height: 400px;
+            width: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 576px) {
+            .header-banner {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 
-<body class="p-4 md:p-8 min-h-screen flex items-center justify-center">
-    <div class="max-w-xl w-full mx-auto bg-white rounded-2xl shadow-2xl shadow-blue-500/10 overflow-hidden">
-        
-        <header class="p-6 md:p-8 bg-blue-600 rounded-t-2xl text-white">
-            <h1 class="text-3xl font-extrabold text-center">Detail Booking</h1>
-            <p class="text-center mt-1 text-blue-200">Informasi lengkap transaksi Anda.</p>
-        </header>
+<body>
+    <?php require __DIR__ . '/../components/header.php'; ?>
 
-        <main class="p-6 md:p-8">
+    <main class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="panel-card overflow-hidden">
+                    <div class="header-banner text-center">
+                        <h2 class="h5 mb-1 fw-bold">Detail Booking</h2>
+                        <div class="small text-white-50">Informasi lengkap transaksi Anda.</div>
+                    </div>
 
-            <!-- Card Ringkasan Workshop & Transaksi -->
-            <div class="mb-8 p-5 bg-blue-50 border-l-4 border-blue-600 rounded-lg shadow-inner">
-                <h3 class="text-xl font-bold text-blue-800 mb-4 flex items-center">
-                    <i data-lucide="ticket" class="icon-sm text-blue-600 mr-2 w-5 h-5"></i>
-                    Ringkasan Pesanan
-                </h3>
+                    <div class="p-4 p-md-5">
+                        <!-- Ringkasan Pesanan -->
+                        <div class="mb-4 summary-panel">
+                            <h6 class="mb-3 fw-bold d-flex align-items-center">
+                                <i data-lucide="ticket" class="me-2" style="width:1.1rem;height:1.1rem;"></i>
+                                Ringkasan Pesanan
+                            </h6>
 
-                <div class="info-item">
-                    <span class="text-gray-600 font-medium">Kode Transaksi</span>
-                    <span class="font-semibold text-gray-900"><?= htmlspecialchars($booking['booking_trx_id']) ?></span>
-                </div>
-                
-                <div class="info-item">
-                    <span class="text-gray-600 font-medium">Nama Workshop</span>
-                    <span class="font-semibold text-blue-600"><?= htmlspecialchars($booking['workshop_name']) ?></span>
-                </div>
+                            <div class="info-item">
+                                <div class="muted-small">Kode Ticket</div>
+                                <div class="fw-semibold"><?= htmlspecialchars($booking['booking_trx_id'] ?? '-') ?></div>
+                            </div>
 
-                <div class="info-item">
-                    <span class="text-gray-600 font-medium">Jumlah Tiket</span>
-                    <span class="font-semibold text-gray-900"><?= htmlspecialchars($booking['quantity']) ?></span>
-                </div>
-                
-                <!-- Total Pembayaran dengan highlight -->
-                <div class="info-item border-b-2 border-blue-200 mt-4 pt-4">
-                    <span class="text-lg font-bold text-gray-800">Total Pembayaran</span>
-                    <span class="text-2xl font-extrabold text-blue-700">
-                        Rp<?= number_format($booking['total_amount'], 0, ',', '.') ?>
-                    </span>
-                </div>
+                            <div class="info-item">
+                                <div class="muted-small">Nama Workshop</div>
+                                <div class="text-primary fw-semibold"><?= htmlspecialchars($booking['workshop_name'] ?? '-') ?></div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="muted-small">Jumlah Tiket</div>
+                                <div class="fw-semibold"><?= htmlspecialchars($booking['quantity'] ?? 1) ?></div>
+                            </div>
+
+                            <div class="info-item mt-3 pt-2 border-top">
+                                <div class="fw-bold">Total Pembayaran</div>
+                                <div class="fs-5 fw-extrabold text-primary">Rp<?= number_format($booking['total_amount'] ?? 0, 0, ',', '.') ?></div>
+                            </div>
+                        </div>
+
+                        <!-- Status Pembayaran -->
+                        <div class="mb-4">
+                            <h6 class="mb-3 fw-bold d-flex align-items-center">
+                                <i data-lucide="shield-check" class="me-2" style="width:1.1rem;height:1.1rem;"></i>
+                                Status Pembayaran
+                            </h6>
+
+                            <?php if (!empty($booking['is_paid'])): ?>
+                                <div class="p-3 rounded text-center fw-bold text-success bg-success bg-opacity-10 border border-success">
+                                    <i data-lucide="check-circle" class="me-2" style="width:1.05rem;height:1.05rem;"></i>
+                                    PEMBAYARAN SUDAH DITERIMA
+                                </div>
+                            <?php else: ?>
+                                <div class="p-3 rounded text-center fw-bold text-warning bg-warning bg-opacity-10 border border-warning">
+                                    <i data-lucide="clock" class="me-2" style="width:1.05rem;height:1.05rem;"></i>
+                                    MENUNGGU PEMBAYARAN
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Detail Pemesan -->
+                        <div class="mb-4 panel-card p-3">
+                            <h6 class="mb-3 fw-bold d-flex align-items-center">
+                                <i data-lucide="user" class="me-2" style="width:1.1rem;height:1.1rem;"></i>
+                                Detail Pemesan
+                            </h6>
+
+                            <div class="mb-2 d-flex justify-content-between">
+                                <div class="muted-small">Nama</div>
+                                <div class="fw-medium"><?= htmlspecialchars($booking['name'] ?? '-') ?></div>
+                            </div>
+
+                            <div class="mb-2 d-flex justify-content-between">
+                                <div class="muted-small">Email</div>
+                                <div class="fw-medium"><?= htmlspecialchars($booking['email'] ?? '-') ?></div>
+                            </div>
+
+                            <div class="mb-2 d-flex justify-content-between">
+                                <div class="muted-small">Telepon</div>
+                                <div class="fw-medium"><?= htmlspecialchars($booking['phone'] ?? '-') ?></div>
+                            </div>
+
+                            <div class="pt-2 mt-2 border-top d-flex justify-content-between">
+                                <div class="muted-small">Transfer Dari</div>
+                                <div class="fw-medium"><?= htmlspecialchars($booking['customer_bank_name'] ?? '-') ?> (<?= htmlspecialchars($booking['customer_bank_account'] ?? '-') ?>)</div>
+                            </div>
+                        </div>
+
+                        <!-- Bukti Transfer -->
+                        <?php if (!empty($booking['proof'])): ?>
+                            <div class="mb-4">
+                                <h6 class="mb-3 fw-bold text-center">Bukti Transfer</h6>
+
+                                <div class="bg-light p-3 rounded">
+                                    <a href="<?= htmlspecialchars($booking['proof']) ?>" target="_blank" class="d-block">
+                                        <img
+                                            src="<?= htmlspecialchars($booking['proof']) ?>"
+                                            alt="Bukti Pembayaran"
+                                            class="proof-img mx-auto d-block shadow-sm"
+                                            onerror="this.onerror=null; this.src='https://placehold.co/400x400/cccccc/333333?text=BUKTI+TIDAK+DITEMUKAN';">
+                                    </a>
+                                    <p class="text-center text-muted small mt-2 mb-0">Klik gambar untuk melihat lebih jelas</p>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Tombol Kembali -->
+                        <div class="text-center mt-4">
+                            <a href="/workshops/<?= htmlspecialchars($booking['workshop_slug'] ?? '') ?>" class="btn btn-primary btn-lg rounded-pill d-inline-flex align-items-center">
+                                <i data-lucide="arrow-left" class="me-2" style="width:1.05rem;height:1.05rem;"></i>
+                                Kembali ke Workshop
+                            </a>
+                        </div>
+
+                    </div> <!-- p-4 -->
+                </div> <!-- panel-card -->
             </div>
-            
-            <!-- Status Pembayaran -->
-            <div class="mb-8">
-                <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center">
-                    <i data-lucide="shield-check" class="icon-sm text-gray-600 mr-2 w-5 h-5"></i>
-                    Status Pembayaran
-                </h3>
-                <div class="p-4 rounded-lg text-center font-bold text-lg shadow-md 
-                    <?php if ($booking['is_paid']): ?>
-                        bg-green-100 text-green-700 border border-green-300
-                    <?php else: ?>
-                        bg-yellow-100 text-yellow-700 border border-yellow-300
-                    <?php endif; ?>">
-                    <?php if ($booking['is_paid']): ?>
-                        <i data-lucide="check-circle" class="inline-block icon-sm w-5 h-5"></i>
-                        PEMBAYARAN SUDAH DITERIMA
-                    <?php else: ?>
-                        <i data-lucide="clock" class="inline-block icon-sm w-5 h-5"></i>
-                        MENUNGGU PEMBAYARAN
-                    <?php endif; ?>
-                </div>
-            </div>
+        </div>
+    </main>
 
-            <!-- Detail Pemesan -->
-            <div class="mb-8 p-5 border rounded-lg shadow-sm">
-                 <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <i data-lucide="user" class="icon-sm text-gray-600 mr-2 w-5 h-5"></i>
-                    Detail Pemesan
-                </h3>
-                <div class="space-y-2 text-sm">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Nama</span>
-                        <span class="font-medium text-gray-900"><?= htmlspecialchars($booking['name']) ?></span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Email</span>
-                        <span class="font-medium text-gray-900"><?= htmlspecialchars($booking['email']) ?></span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">Telepon</span>
-                        <span class="font-medium text-gray-900"><?= htmlspecialchars($booking['phone']) ?></span>
-                    </div>
-                    <div class="flex justify-between pt-2 border-t mt-2">
-                        <span class="text-gray-500">Transfer Dari</span>
-                        <span class="font-medium text-gray-900"><?= htmlspecialchars($booking['customer_bank_name']) ?> (<?= htmlspecialchars($booking['customer_bank_account']) ?>)</span>
-                    </div>
-                </div>
-            </div>
+    <?php require __DIR__ . '/../components/footer.php'; ?>
 
-            <!-- Bukti Transfer -->
-            <?php if (!empty($booking['proof'])): ?>
-                <div class="mt-8 pt-4 border-t">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Bukti Transfer</h3>
-                    <div class="bg-gray-100 p-4 rounded-xl shadow-inner">
-                         <a href="<?= htmlspecialchars($booking['proof']) ?>" target="_blank" class="block">
-                            <img src="<?= htmlspecialchars($booking['proof']) ?>" 
-                                 alt="Bukti Pembayaran"
-                                 class="w-full h-auto object-contain rounded-lg shadow-lg transition duration-300 hover:opacity-90 cursor-pointer"
-                                 style="max-height: 400px;"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/400x400/cccccc/333333?text=BUKTI+TIDAK+DITEMUKAN';"
-                            >
-                        </a>
-                        <p class="text-center text-sm text-gray-500 mt-2">Klik gambar untuk melihat lebih jelas</p>
-                    </div>
-                </div>
-            <?php endif; ?>
+    <!-- Bootstrap JS bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-            <!-- Tombol Kembali -->
-            <div class="text-center mt-10">
-                <a href="/workshops/<?= htmlspecialchars($booking['workshop_slug']) ?>" 
-                   class="inline-flex items-center bg-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg shadow-blue-500/40 hover:bg-blue-700 transition duration-300 transform hover:scale-[1.02]">
-                    <i data-lucide="arrow-left" class="icon-sm w-5 h-5 mr-2"></i>
-                    Kembali ke Workshop
-                </a>
-            </div>
-        </main>
-    </div>
-
-    <!-- Script untuk menginisialisasi ikon Lucide -->
+    <!-- Init Lucide icons -->
     <script>
         lucide.createIcons();
     </script>
