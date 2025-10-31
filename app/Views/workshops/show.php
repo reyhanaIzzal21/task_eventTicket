@@ -141,13 +141,17 @@
 
                                     <div class="pt-3 border-top mt-3">
                                         <h3 class="h6 fw-semibold mb-3 d-flex align-items-center">
-                                            <i data-lucide="map-pin" class="icon"></i> Lokasi Acara
+                                            <i data-lucide="map-pin" class="icon"></i>
+                                            <?= htmlspecialchars($workshop['address'] ?? 'Alamat tidak tersedia.') ?>
                                         </h3>
 
-                                        <?php
-                                        $location_image = !empty($workshop['venue_thumbnail']) ? $workshop['venue_thumbnail'] : (!empty($workshop['bg_map']) ? $workshop['bg_map'] : null);
-                                        $alt_text = !empty($workshop['venue_thumbnail']) ? 'Venue Thumbnail' : 'Background Map';
-                                        ?>
+                                        <div class="">
+                                            <p class="m-0 p-0">Vanue:</p>
+                                            <?php
+                                            $location_image = !empty($workshop['venue_thumbnail']) ? $workshop['venue_thumbnail'] : (!empty($workshop['bg_map']) ? $workshop['bg_map'] : null);
+                                            $alt_text = !empty($workshop['venue_thumbnail']) ? 'Venue Thumbnail' : 'Background Map';
+                                            ?>
+                                        </div>
 
                                         <?php if (!empty($location_image)): ?>
                                             <img
@@ -156,8 +160,6 @@
                                                 class="image-map mb-3"
                                                 onerror="this.onerror=null; this.src='https://placehold.co/800x200/4c7c8c/ffffff?text=LOKASI+ACARA';">
                                         <?php endif; ?>
-
-                                        <p class="mb-2"><?= htmlspecialchars($workshop['address'] ?? 'Alamat tidak tersedia.') ?></p>
 
                                         <?php if (!empty($workshop['bg_map'])): ?>
                                             <a href="<?= htmlspecialchars($workshop['bg_map']) ?>" target="_blank" class="btn btn-outline-primary btn-sm">
@@ -204,7 +206,7 @@
                                     <div class="small fw-medium text-dark">ThreeTix</div>
                                 </div>
 
-                                <div class="mt-4 pt-3 border-top">
+                                <div class="mt-4">
                                     <p class="mb-1 muted-small">Harga Tiket</p>
                                     <p class="h4 fw-bold text-primary mb-0">Rp<?= number_format($workshop['price'] ?? 0, 0, ',', '.') ?></p>
                                 </div>

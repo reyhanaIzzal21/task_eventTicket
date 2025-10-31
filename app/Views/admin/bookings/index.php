@@ -9,7 +9,7 @@ $i = 1;
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-                <h4 class="mb-0">Bookings</h4>
+                <h4 class="mb-0">Manage Bookings</h4>
                 <small class="text-muted">Manage booking transactions</small>
             </div>
             <div>
@@ -23,8 +23,8 @@ $i = 1;
             <div class="card-body">
                 <?php if (empty($bookings)): ?>
                     <div class="text-center py-4">
-                        <p class="mb-2">No bookings yet.</p>
-                        <a href="/admin/workshops" class="btn btn-outline-primary btn-sm">Create workshop</a>
+                        <img src="/assets/images/empty-data.jpg" alt="empty data" class="img-fluid mb-3" style="max-width:200px;">
+                        <p class="mb-2">empty data</p>
                     </div>
                 <?php else: ?>
                     <div class="table-responsive">

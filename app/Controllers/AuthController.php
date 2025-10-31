@@ -25,6 +25,13 @@ class AuthController
         require __DIR__ . '/../Views/auth/register.php';
     }
 
+    // get all user
+    public function getAllUser()
+    {
+        $userRecords = $this->userModel->getAllUser();
+        require __DIR__ . '/../Views/admin/users/index.php';
+    }
+
     // handle register post
     public function register()
     {

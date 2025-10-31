@@ -90,10 +90,9 @@
             </div>
 
             <?php if (empty($bookings)): ?>
-                <div class="card p-4">
-                    <div class="text-center">
-                        <p class="mb-0 small-muted">Anda belum memiliki booking.</p>
-                    </div>
+                <div class="text-center py-4">
+                    <img src="/assets/images/empty-data.jpg" alt="empty data" class="img-fluid mb-3" style="max-width:200px;">
+                    <p class="mb-2">empty data</p>
                 </div>
             <?php else: ?>
                 <div class="row g-3">

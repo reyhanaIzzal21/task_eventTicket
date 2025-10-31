@@ -28,10 +28,7 @@ class AdminController
 
     public function show(string $bookingTrxId)
     {
-        if (empty($_SESSION['user_id'])) {
-            header('Location: /login');
-            exit;
-        }
+        $this->ensureAdmin();
 
         // Cari data booking berdasarkan booking_trx_id
         $query = "SELECT bt.*, w.name AS workshop_name, w.started_at AS workshop_started_at, w.price AS workshop_price, w.thumbnail AS workshop_thumbnail, w.address AS workshop_address

@@ -9,6 +9,18 @@ class User
         $this->databaseConnection = $databaseConnection;
     }
 
+    // get all user data
+    public function getAllUser()
+    {
+        $query = "SELECT * FROM users ORDER BY created_at DESC";
+        $result = $this->databaseConnection->query($query);
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
     public function findByEmail(string $email)
     {
         $query = "SELECT * FROM users WHERE email = ? LIMIT 1";
