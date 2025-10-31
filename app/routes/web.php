@@ -96,6 +96,13 @@ if (preg_match('#^/booking/create/([^/]+)$#', $requestUri, $matches) && $request
     exit;
 }
 
+if ($requestUri === '/booking/verify' && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/BookingController.php';
+    $controller = new BookingController();
+    $controller->verifyTicket();
+    exit;
+}
+
 
 
 // Admin: workshops (list)
@@ -183,5 +190,13 @@ if (preg_match('#^/workshops/([a-zA-Z0-9\-]+)$#', $requestUri, $matches) && $req
     require_once __DIR__ . '/../../app/Controllers/WorkshopController.php';
     $controller = new WorkshopController();
     $controller->show($matches[1]);
+    exit;
+}
+
+// Admin: get all user
+if ($requestUri === '/admin/users' && $requestMethod === 'GET') {
+    require_once __DIR__ . '/../../app/Controllers/AuthController.php';
+    $controller = new AuthController();
+    $controller->getAllUser();
     exit;
 }

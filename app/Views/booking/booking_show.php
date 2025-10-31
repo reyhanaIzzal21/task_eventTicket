@@ -110,6 +110,15 @@
                                 <div class="fw-semibold"><?= htmlspecialchars($booking['booking_trx_id'] ?? '-') ?></div>
                             </div>
 
+                            <!-- generate QR code -->
+                            <div class="info-item">
+                                <div class="muted-small">QR Ticket</div>
+                                <div class="fw-semibold">
+                                    <div id="qrcode"></div>
+                                    <div class="muted-small mt-1">Tunjukkan QR ini saat masuk.</div>
+                                </div>
+                            </div>
+
                             <div class="info-item">
                                 <div class="muted-small">Nama Workshop</div>
                                 <div class="text-primary fw-semibold"><?= htmlspecialchars($booking['workshop_name'] ?? '-') ?></div>
@@ -205,6 +214,27 @@
             </div>
         </div>
     </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Variabel berikut diisi dari PHP (server-side) saat rendering view
+        const bookingTransactionId = '<?php echo addslashes($booking["booking_trx_id"] ?? ""); ?>';
+        const expiryTimestamp = <?php echo isset($qrExpiry) ? (int)$qrExpiry : 0; ?>;
+        const token = '<?php echo addslashes($qrToken ?? ""); ?>';
+
+        // Bangun URL verify (gunakan path sesuai Opsi A atau B)
+        const verifyUrl = window.location.protocol + '//' + window.location.host +
+            '/booking/verify?trx=' + encodeURIComponent(bookingTransactionId) +
+            (expiryTimestamp ? '&exp=' + expiryTimestamp : '') +
+            (token ? '&token=' + encodeURIComponent(token) : '');
+
+        // Render QR
+        new QRCode(document.getElementById('qrcode'), {
+            text: verifyUrl,
+            width: 160,
+            height: 160
+        });
+    </script>
 
     <?php require __DIR__ . '/../components/footer.php'; ?>
 

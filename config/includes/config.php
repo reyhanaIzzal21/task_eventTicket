@@ -15,5 +15,10 @@ if (!defined('DB_HOST')) {
 
 // secret untuk registrasi admin
 if (!defined('ADMIN_SECRET')) {
-    define('ADMIN_SECRET', 'ADMIN2025');
+    define('ADMIN_SECRET', 'ADMINITUGAJAH2025');
+}
+
+// secret khusus untuk QR/token (lebih baik pisah dari ADMIN_SECRET)
+if (!defined('QR_SECRET')) {
+    define('QR_SECRET', 'please_change_this_to_a_long_random_string');
 }

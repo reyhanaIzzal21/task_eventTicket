@@ -21,6 +21,15 @@ class BookingController
         $this->workshopModel = new Workshop($this->databaseConnection);
     }
 
+    private function ensureAdmin()
+    {
+        if (empty($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+            http_response_code(403);
+            echo "Forbidden: admin only";
+            exit;
+        }
+    }
+
     public function index()
     {
         if (empty($_SESSION['user_id'])) {
@@ -189,5 +198,83 @@ class BookingController
         }
 
         require $viewPath;
+    }
+
+    public function verifyTicket()
+    {
+        $this->ensureAdmin();
+
+        $bookingTransactionId = isset($_GET['trx']) ? trim($_GET['trx']) : '';
+        $token = isset($_GET['token']) ? trim($_GET['token']) : '';
+        $expiryTimestamp = isset($_GET['exp']) ? (int) $_GET['exp'] : 0;
+
+        if ($bookingTransactionId === '') {
+            $reason = 'Invalid request: missing transaction id.';
+            require_once __DIR__ . '/../Views/admin/bookings/widgets/ticket-invalid.php';
+            return;
+        }
+
+        require_once __DIR__ . '../../../config/includes/config.php';
+
+        $secretKey = defined('QR_SECRET') ? QR_SECRET : (defined('ADMIN_SECRET') ? ADMIN_SECRET : '');
+
+        if ($token !== '') {
+            $expectedToken = hash_hmac('sha256', $bookingTransactionId . '|' . $expiryTimestamp, $secretKey);
+            if (!hash_equals($expectedToken, $token) || ($expiryTimestamp > 0 && time() > $expiryTimestamp)) {
+                $reason = 'Invalid or expired QR code.';
+                require_once __DIR__ . '/../Views/admin/bookings/widgets/ticket-invalid.php';
+                return;
+            }
+        }
+
+        // koneksi PDO menggunakan konstanta dari config
+        $databaseHost = defined('DB_HOST') ? DB_HOST : 'localhost';
+        $databaseName = defined('DB_NAME') ? DB_NAME : 'task_eventticket';
+        $databaseUser = defined('DB_USER') ? DB_USER : 'root';
+        $databasePassword = defined('DB_PASS') ? DB_PASS : '';
+
+        $databaseDsn = 'mysql:host=' . $databaseHost . ';dbname=' . $databaseName . ';charset=utf8mb4';
+
+        try {
+            $pdo = new PDO($databaseDsn, $databaseUser, $databasePassword, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
+        } catch (PDOException $ex) {
+            $reason = 'Database connection error.';
+            // log error jika ingin: error_log($ex->getMessage());
+            require_once __DIR__ . '/../Views/admin/bookings/widgets/ticket-invalid.php';
+            return;
+        }
+
+        // ambil booking
+        $stmt = $pdo->prepare('SELECT * FROM booking_transaction WHERE booking_trx_id = :booking_trx_id LIMIT 1');
+        $stmt->execute(['booking_trx_id' => $bookingTransactionId]);
+        $booking = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$booking) {
+            $reason = 'Ticket not found.';
+            require_once __DIR__ . '/../Views/admin/bookings/widgets/ticket-invalid.php';
+            return;
+        }
+
+        if ((int)$booking['is_paid'] === 0) {
+            $reason = 'Ticket found but not paid yet.';
+            require_once __DIR__ . '/../Views/admin/bookings/widgets/ticket-invalid.php';
+            return;
+        }
+
+        if ((int)$booking['is_used'] === 1) {
+            $reason = 'Ticket has already been used.';
+            $usedAt = $booking['used_at'] ?? null;
+            require_once __DIR__ . '/../Views/admin/bookings/widgets/ticket-invalid.php';
+            return;
+        }
+
+        $adminId = $_SESSION['admin_id'] ?? null;
+        $update = $pdo->prepare('UPDATE booking_transaction SET is_used = 1, used_at = NOW(), used_by = :admin_id WHERE id = :id');
+        $update->execute(['admin_id' => $adminId, 'id' => $booking['id']]);
+
+        $booking['marked_used_at'] = date('Y-m-d H:i:s'); // waktu server saat verifikasi
+        require_once __DIR__ . '/../Views/admin/bookings/widgets/ticket-valid.php';
     }
 }
